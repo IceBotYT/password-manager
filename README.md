@@ -40,10 +40,30 @@ If you haven't already, [create an IFTTT account](https://ifttt.com/join).
 2. Make a new applet.  
 Since IFTTT turned into a subscription service (😠), you can only create 3 applets at a time. Make sure to archive applets you do not want to use.
 
-3. Set up the applet.  
-INSERT PICTURE HERE
+3. Select Webhooks.
+![Select webhooks on IFTTT](https://i.imgur.com/tDigD3K.png)
 
-4. 
+4. Click `Receive a web request`.
+
+5. Enter `pman_del`.  
+![Enter pman_del in the event name](https://i.imgur.com/qpDkY8y.png)  
+**IT CANNOT BE ANYTHING ELSE!**  
+
+6. Link the event to any service you want. For example, I'm using Notifications.  
+![Send a notification to the IFTTT app](https://i.imgur.com/TC26KbN.png)
+
+7. Press Continue and set up any other settings you like.  
+![Press the button that says Continue](https://i.imgur.com/vEXh004.png)
+
+8. Repeat steps 1-4. This time, enter `pman_issue`.
+
+9. Once you have your applets ready, head over [here](https://ifttt.com/maker_webhooks/settings) and copy the end of the link.  
+It'll look like this: `https://maker.ifttt.com/use/>>ioSngMw9NsMalWngkSmwSa<<`.  
+You copy where it is marked.
+
+10. Add it to your `.env` file. And you're done!
+
+Any issues? Submit an issue below.
 
 ### Questions & Issues
 

@@ -1,0 +1,106 @@
+<head>
+  <meta name="viewport" content="width=device-width, inital-scale=1">
+  <style>
+    /* The snackbar - position it at the bottom and in the middle of the screen */
+    #snackbar {
+            visibility: hidden; /* Hidden by default. Visible on click */
+            min-width: 250px; /* Set a default minimum width */
+            margin-left: -125px; /* Divide value of min-width by 2 */
+            background-color: #333; /* Black background color */
+            color: #fff; /* White text color */
+            text-align: center; /* Centered text */
+            border-radius: 2px; /* Rounded borders */
+            padding: 16px; /* Padding */
+            position: fixed; /* Sit on top of the screen */
+            z-index: 1; /* Add a z-index if needed */
+            left: 50%; /* Center the snackbar */
+            bottom: 30px; /* 30px from the bottom */
+          }
+  
+          /* Show the snackbar when clicking on a button (class added with JavaScript) */
+          #snackbar.show {
+            visibility: visible; /* Show the snackbar */
+            /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+            However, delay the fade out process for 2.5 seconds */
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+          }
+          /* Animations to fade the snackbar in and out */
+          @-webkit-keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+          }
+  
+          @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+          }
+  
+          @-webkit-keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+          }
+  
+          @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+          }
+  </style>
+  <title>Login</title>
+</head>
+<h1>Login</h1>
+<% if (messages.error) { %>
+  <%= messages.error %>
+<% } %>
+<form action="/login" method="POST">
+  <div>
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" required>
+  </div>
+  <div>
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+  </div>
+  <button type="submit">Login</button>
+</form>
+<div id="snackbar">%PLACEHOLDER_ALERT%</div>
+<script>
+  function ajax(method, url, done) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url)
+            xhr.onreadystatechange = function() {
+              if (this.status == 200 && this.readyState == 4) {
+                done(null, xhr.responseText)
+              }
+            };
+            xhr.onerror = function() {
+              done(xhr.response)
+            };
+            xhr.send();
+          };
+
+  function snackbar(text) {
+    if (text == null) {
+      throw new Error("Text argument is needed")
+    }
+    var snackbar = document.getElementById('snackbar')
+    snackbar.innerHTML = text
+    snackbar.className = "show";
+    setTimeout(function() { snackbar.className = snackbar.className.replace("show", ""); location = '/login'; }, 3000);
+  }
+  var deleted = new URLSearchParams(window.location.search).get('deleted')
+  var userId = new URLSearchParams(window.location.search).get('id')
+  if (deleted) {
+    ajax('GET', '/deleteacc?id=' + userId, function(err, data) {
+      if (err) throw err;
+      if (data == "Success") {
+        snackbar(`Your account has been successfully deleted.
+        Thank you for using Password Manager.`)
+      } else {
+        snackbar(`An error has occured while deleting your account.
+        Contact the developer for assistance.`)
+      }
+    })
+  }
+</script>
+<a href="/register">Register</a>

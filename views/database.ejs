@@ -1,0 +1,729 @@
+<head > <style > body {
+    padding: 25px;
+    background-color: white;
+    color: black;
+    font-size: 25px;
+}
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    animation: fadeIn ease 1s;
+    -webkit-animation: fadeIn ease 1s;
+    -moz-animation: fadeIn ease 1s;
+    -o-animation: fadeIn ease 1s;
+    -ms-animation: fadeIn ease 1s;
+}
+
+.noanim-modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.w3-animate-top {
+    position: relative;
+    animation: animatetop 0.4s
+}
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-ms-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+    visibility: visible; /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+          However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
+}
+
+/* Popup container */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 0.3s;
+    animation: fadeIn 0.3s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.veil {
+        display: block; /* Shown when loading */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(70,55,55); /* Fallback color */
+          background-color: rgba(70, 55, 55, 0.4); /* Black w/ opacity */
+    }
+</style> <link rel="stylesheet" href="/loadingdot"> <title>My Passwords</title> <meta name="viewport" content="width=device-width, inital-scale=1"> </head>
+
+<body onload="display();">
+    <div id="veil" class="veil"></div>
+    <h1>My Passwords</h1>
+    <button onclick="newPassword();">Add Password <strong>+</strong></button> 
+    <form action="/database/search">
+      <input name="q" aria-placeholder="Search...">
+      <input type="submit" value="🔎">
+    </form>
+    
+    <p>Generate new password:</p>
+    <label for="dPassLength">Length:</label>
+    <input type="number" value="32" id="dPassLength">
+    <label for="dAlphabet">Alphabet:</label>
+    <input type="text" value="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()-_=+[]';:/?.," id="dAlphabet">
+    <button class="popup" onclick="generatePassword();">Generate
+      <span class="popuptext" id="passwordPopup">Copied to clipboard!</span>
+    </button>
+    <br><br>
+    <table style="width:100%" id="table" border="1" bgcolor="#FFFFFF">
+        <tr>
+            <th>Code</th>
+            <th>Link</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Buttons</th>
+        </tr>
+    </table><br><br>
+    <button onclick="location = '/'"><strong><</strong> Go Back</button><br>
+    <div id="typeModal" class="modal">
+        <div class="modal-content w3-animate-top">
+          <span class="close" id="typeClose">&times;</span>
+          <p>What would you like to change?</p>
+          <input type="radio" id="code" name="type" value="code">
+          <label for="code">Code</label><br>
+          <input type="radio" id="link" name="type" value="link">
+          <label for="link">Link</label><br>
+          <input type="radio" id="name" name="type" value="name">
+          <label for="name">Name</label><br>
+          <input type="radio" id="ipassword" name="type" value="ipassword">
+          <label for="ipassword">Input Password</label><br>
+          <input type="radio" id="rpassword" name="type" value="rpassword">
+          <label for="rpassword">Random Password</label><br>
+          <button id="typeSubmit">Next</button>
+        </div>
+      </div>
+      <div id="changeModal" class="modal">
+        <div class="noanim-modal-content">
+          <span class="close" id="changeClose">&times;</span>
+          <p>What do you want to update it to?</p>
+          <input type="text" id="change" name="change">
+          <button id="changeSubmit">Submit</button>
+        </div>
+      </div>
+      <div id="passModal" class="modal">
+        <div class="noanim-modal-content">
+          <span class="close" id="passClose">&times;</span>
+          <p>Is this a good password?<br>If not, please select "Generate New".</p><br>
+          <p id="newRPass"></p><br>
+          <label for="passLength">Length:</label>
+          <input type="number" id="passLength" value="32">
+          <label for="alphabet">Alphabet:</label>
+          <input type="text" id="alphabet" value="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()-_=+[]';:/?.,">
+          <button id="genNew">Generate New</button><br>
+          <button id="passGood">Looks good!</button>
+        </div>
+      </div>
+      <div id="newModal" class="modal">
+        <div class="modal-content w3-animate-top">
+          <span class="close" id="newClose">&times;</span>
+          <h1>New Password</h1>
+          <form action="/database/create">
+            <label for="code">Code</label><br>
+            <input id="newCode" name="code" required><br><br>
+            <label for="link">Link</label><br>
+            <input id="newLink" name="link" type="url" required><br><br>
+            <label for="name">Name</label><br>
+            <input id="newName" name="name" required><br><br>
+            <label for="password">Password</label><br>
+            <input id="newPassword" name="password" type="password" required><br><br>
+            <input type="submit" value="Create" id="newSubmit">
+          </form>
+        </div>
+      </div>
+      <div class="cssload-dots" id="load-dots">
+        <div class="cssload-dot"></div>
+        <div class="cssload-dot"></div>
+        <div class="cssload-dot"></div>
+        <div class="cssload-dot"></div>
+        <div class="cssload-dot"></div>
+      </div>
+      
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="12" ></feGaussianBlur>
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0	0 1 0 0 0	0 0 1 0 0	0 0 0 18 -7" result="goo" ></feColorMatrix>
+            <!--<feBlend in2="goo" in="SourceGraphic" result="mix" ></feBlend>-->
+          </filter>
+        </defs>
+      </svg>
+      <div id="snackbar">%PLACEHOLDER_ALERT%</div>
+      <script>
+        var created = new URLSearchParams(window.location.search).get('created')
+        if (created) snackbar("Entry created sucessfully!");
+        var deleted = new URLSearchParams(window.location.search).get('deleted')
+        if (deleted) snackbar("Entry deleted successfully!");
+        var error = new URLSearchParams(window.location.search).get('error')
+        if (error) snackbar("An error occured while performing that action.")
+        var updated = new URLSearchParams(window.location.search).get('updated')
+        if (updated) snackbar("Entry updated successfully!")
+        function snackbar(text) {
+          if (text == null) {
+            throw new Error("Text argument is needed")
+          }
+          var snackbar = document.getElementById('snackbar')
+          snackbar.innerHTML = text
+          snackbar.className = "show";
+          setTimeout(function() { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+        }
+          function display() { 
+            
+        
+        // Displaying results timee
+        var results = <%-JSON.stringify(db)%>
+        if (results.length == 0) {
+          alert("No passwords in your database. Please create a new password in the following dialog.")
+          newPassword()
+        }
+          var table = document.getElementById('table')
+          function ajax(method, url, done) {
+              var xhr = new XMLHttpRequest();
+              xhr.open(method, url)
+              xhr.onreadystatechange = function() {
+                if (this.status == 200 && this.readyState == 4) {
+                  done(null, xhr.responseText)
+                }
+              };
+              xhr.onerror = function() {
+                done(xhr.responseText)
+              };
+              xhr.send();
+            };
+          results.forEach(result => {
+            var row = table.insertRow(-1);
+              var cell1 = row.insertCell(0);
+              var cell2 = row.insertCell(1);
+              var cell3 = row.insertCell(2);
+              var cell4 = row.insertCell(3);
+              var cell5 = row.insertCell(4);
+  
+              ajax('GET', '/database/decrypt?password=' + JSON.stringify(result.password), function(err, data) {
+                if (err) throw err;
+                cell4.innerHTML = data + ` <button onclick="copy('`+ data + `')">Copy</button>`
+                cell5.innerHTML = `<button onclick='deleteEntry("` + result.code + `")'>Delete</button> <button onclick='edit("` + result.code + `")'>Edit</button> <button onclick='copyopen("` + result.link + `", "`+ data + `")'>CopyOpen</button>`
+              })
+  
+              cell1.innerHTML = result.code
+              cell2.innerHTML = result.link + " <a href=" + result.link + ">Open</a>"
+              cell3.innerHTML = result.name + ` <button onclick='copy("` + result.name + `")'>Copy</button>`
+          });
+          document.getElementById('load-dots').style.display = "none";
+          document.getElementById('veil').style.display = "none";
+        }
+
+        function copy(text) {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el)
+        el.select()
+        document.execCommand('copy')
+        document.body.removeChild(el);
+        alert("Copied to clipboard!")
+      }
+
+      function copynoalert(text) {
+        const el = document.createElement('textarea');
+        el.value = text;
+        document.body.appendChild(el)
+        el.select()
+        document.execCommand('copy')
+        document.body.removeChild(el);
+      }
+
+      function copyopen(link, password) {
+        copynoalert(password)
+        window.open(link)
+      }
+
+      function deleteEntry(code) {
+        var yn = confirm("Are you sure you want to delete " + code + "? THIS CANNOT BE UNDONE!")
+        if (!yn) {
+          return snackbar("Cancelled.")
+        }
+        document.getElementById('load-dots').style.display = "block";
+        document.getElementById('veil').style.display = "block";
+        function ajax(method, url, done) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url)
+            xhr.onreadystatechange = function() {
+              if (this.status == 202 && this.readyState == 4) {
+                done(null, xhr.responseText)
+              }
+            };
+            xhr.onerror = function() {
+              done(xhr.response)
+            };
+            xhr.send();
+          };
+
+          ajax('GET', '/database/delete?code=' + code, function(err, data) {
+            if (err) {
+              throw err;
+              location = '/database?error=true'
+            }
+            if (data == "Success") {
+              location = '/database?deleted=true'
+            } else {
+              location = '/database?error=true'
+            }
+          })
+        document.getElementById('load-dots').style.display = "none";
+        document.getElementById('veil').style.display = "none";
+      }
+
+      function edit(code) {
+          var typeModal = document.getElementById('typeModal')
+          var changeModal = document.getElementById('changeModal')
+          var passModal = document.getElementById('passModal')
+          var typeSpan = document.getElementById('typeClose')
+          var changeClose = document.getElementById('changeClose')
+          var passClose = document.getElementById('passClose')
+          var typeSubmit = document.getElementById('typeSubmit')
+          var changeSubmit = document.getElementById('changeSubmit')
+          var passSubmit = document.getElementById('passGood')
+          var genNew = document.getElementById('genNew')
+          typeModal.style.display = "block";
+
+          function clearType() {
+            document.getElementById('code').checked = false;
+            document.getElementById('name').checked = false;
+            document.getElementById('ipassword').checked = false;
+            document.getElementById('rpassword').checked = false;
+            document.getElementById('link').checked = false;
+          }
+
+          function clearSubmit() {
+            document.getElementById('change').value = "";
+          }
+
+          function clearPass() {
+            document.getElementById('newRPass').innerHTML = "";
+          }
+
+          typeSpan.onclick = function() {
+            clearType()
+            typeModal.style.display = "none";
+          }
+
+          window.onclick = function(event) {
+            if (event.target == typeModal) {
+              clearType()
+              typeModal.style.display = "none";
+            }
+          }
+
+          changeClose.onclick = function() {
+            clearSubmit()
+            clearType()
+            clearPass()
+            changeModal.style.display = "none";
+          }
+          window.onclick = function(event) {
+            if (event.target == changeModal) {
+              clearSubmit()
+              clearType()
+              clearPass()
+              typeModal.style.display = "none";
+            }
+          }
+
+          passClose.onclick = function() {
+            clearType()
+            clearPass()
+            clearSubmit()
+            passModal.style.display = "none";
+          }
+          window.onclick = function(event) {
+            if (event.target == passModal) {
+              clearSubmit()
+              clearType()
+              clearPass()
+              passModal.style.display = "none";
+            }
+          }
+
+          var type;
+
+          typeSubmit.onclick = function() {
+            typeModal.style.display = "none";
+
+            if (document.getElementById('code').checked) {
+              type = "code";
+            } else if (document.getElementById('name').checked) {
+              type = "name";
+            } else if (document.getElementById('ipassword').checked) {
+              type = "ipassword";
+              document.getElementById('change').setAttribute('type', 'password')
+            } else if (document.getElementById('link').checked) {
+              type = "link";
+            } else if (document.getElementById('rpassword').checked) {
+              type = "rpassword";
+            }
+
+            if (type !== "rpassword") {
+              changeModal.style.display = "block";
+            } else {
+              var length = document.getElementById('passLength').value,
+                  charset = document.getElementById('alphabet').value,
+                  retVal = "",
+                  n = charset.length;
+              for (let i = 0; i < length; ++i) {
+                retVal += charset.charAt(Math.floor(Math.random() * n))
+              }
+              document.getElementById('newRPass').innerHTML = retVal;
+              passModal.style.display = "block";
+            }
+          }
+
+          genNew.onclick = function() {
+            var length = document.getElementById('passLength').value,
+                charset = document.getElementById('alphabet').value,
+                retVal = "",
+                n = charset.length;
+            for (let i = 0; i < length; ++i) {
+              retVal += charset.charAt(Math.floor(Math.random() * n))
+            }
+            document.getElementById('newRPass').innerHTML = retVal;
+          }
+
+          changeSubmit.onclick = function () {
+            if (type == "ipassword") {
+            type = "password";
+          }
+            var yn = confirm(`Are you sure you want to change the ${type} of ${code} to ${document.getElementById('change').value}?`)
+            if (!yn) {
+              clearSubmit()
+              clearType()
+              snackbar("Cancelled.")
+              return changeModal.style.display = "none";
+            }
+            snackbar("This may take a moment...")
+            changeModal.style.display = "none";
+            document.getElementById('load-dots').style.display = "block";
+            document.getElementById('veil').style.display = "block";
+
+            function ajax(method, url, done) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url)
+            xhr.onreadystatechange = function() {
+              if (this.status == 200 && this.readyState == 4) {
+                done(null, xhr.responseText)
+              }
+            };
+            xhr.onerror = function() {
+              done(xhr.response)
+            };
+            xhr.send();
+          };
+
+          ajax('GET', '/database/update?toChange=' + type + '&_code=' + code + '&update=' + document.getElementById('change').value, function(err, data) {
+            if (err) throw err;
+            if (data == "Success") {
+              document.getElementById("load-dots").style.display = "none";
+              document.getElementById('veil').style.display = "none";
+              location = '/database?updated=true'
+              
+            } else {
+              document.getElementById("load-dots").style.display = "none";
+              document.getElementById('veil').style.display = "none";
+              snackbar("There is no error and no success. It should not be possible to recieve this error.")
+              location = '/database?error=true'
+            }
+          })
+          }
+
+          passSubmit.onclick = function() {
+            var yn = confirm(`Are you sure you want to change the password of ${code} to ${document.getElementById('newRPass').innerHTML}?`)
+            if (!yn) {
+              clearSubmit()
+              clearType()
+              clearPass()
+              snackbar("Cancelled.")
+              return passModal.style.display = "none";
+            }
+            snackbar("This may take a moment...")
+            passModal.style.display = "none";
+            document.getElementById('load-dots').style.display = "block";
+            document.getElementById('veil').style.display = "block";
+
+            function ajax(method, url, done) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url)
+            xhr.onreadystatechange = function() {
+              if (this.status == 200 && this.readyState == 4) {
+                done(null, xhr.responseText)
+              }
+            };
+            xhr.onerror = function() {
+              done(xhr.response)
+            };
+            xhr.send();
+          };
+          ajax('GET', '/database/update?toChange=password&_code=' + code + '&update=' + document.getElementById('newRPass').innerHTML, function(err, data) {
+            if (err) throw err;
+            if (data == "Success") {
+              document.getElementById("load-dots").style.display = "none";
+              document.getElementById('veil').style.display = "none";
+              location = '/database?updated=true'
+              
+            } else {
+              document.getElementById("load-dots").style.display = "none";
+              document.getElementById('veil').style.display = "none";
+              snackbar("There is no error and no success. It should not be possible to recieve this error.")
+              location = '/database?error=true'
+            }
+          })
+          }
+      }
+
+      function newPassword() {
+        var newModal = document.getElementById('newModal')
+        var newClose = document.getElementById('newClose')
+        var newSubmit = document.getElementById('newSubmit')
+
+        newModal.style.display = "block";
+
+        function clear() {
+          document.getElementById('newCode').value = "";
+          document.getElementById('newLink').value = "";
+          document.getElementById('newName').value = "";
+          document.getElementById('newPassword').value = "";
+        }
+
+        newClose.onclick = function() {
+          clear()
+          newModal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == newModal) {
+              clear()
+              newModal.style.display = "none";
+            }
+          }
+      }
+
+      function generatePassword() {
+        var length = document.getElementById('passLength').value,
+                charset = document.getElementById('alphabet').value,
+                retVal = "",
+                n = charset.length;
+            for (let i = 0; i < length; ++i) {
+              retVal += charset.charAt(Math.floor(Math.random() * n))
+            }
+          copynoalert(retVal)
+          var popup = document.getElementById('passwordPopup')
+          popup.classList.toggle('show');
+      }
+      </script>
+</body>

@@ -1,0 +1,87 @@
+<head>
+<link rel="stylesheet" href="/loadingdot">
+<meta name="viewport" content="width=device-width, inital-scale=1">
+<style>
+    .veil {
+        display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(70,55,55); /* Fallback color */
+          background-color: rgba(70, 55, 55, 0.4); /* Black w/ opacity */
+    }
+</style>
+</head>
+<title>Secret Bulk Import Page</title>
+<div id="veil" class="veil"></div>
+<h1>Secret Bulk Import Page</h1>
+<p>Please put your list of passwords in JSON format below. Then click Import. Any errors? Contact the developer. (Only from Google Passwords)</p>
+<textarea id="data" rows="50" cols="50">[
+    {
+        "name": "GOOGLE",
+        "url": "https://google.com",
+        "username": "email@gmail.com",
+        "password": "password"
+    },
+    {
+        "name": "EXAMPLE",
+        "url": "https://example.edu",
+        "username": "example@example.edu",
+        "password": "example"
+    }
+]</textarea>
+<button id="import" style="position: absolute; top: 14.1%; left: 30.5%" onclick='bulkImport();'>Import</button>
+<div class="cssload-dots" id="load-dots" style="z-index: 2; display: none;">
+    <div class="cssload-dot"></div>
+    <div class="cssload-dot"></div>
+    <div class="cssload-dot"></div>
+    <div class="cssload-dot"></div>
+    <div class="cssload-dot"></div>
+  </div>
+  
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="goo">
+        <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="12" ></feGaussianBlur>
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0	0 1 0 0 0	0 0 1 0 0	0 0 0 18 -7" result="goo" ></feColorMatrix>
+        <!--<feBlend in2="goo" in="SourceGraphic" result="mix" ></feBlend>-->
+      </filter>
+    </defs>
+  </svg>
+<script>
+    function bulkImport() {
+        var yn = confirm("Please check your list of passwords to make sure they are in the right format, then press OK.")
+        if (!yn) {
+            return;
+        }
+        document.getElementById('load-dots').style.display = "block";
+        document.getElementById('veil').style.display = "block";
+        var passwords = document.getElementById('data').value
+        function ajax(method, url, body, done) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url)
+            xhr.onreadystatechange = function() {
+              if (this.status == 200 && this.readyState == 4) {
+                done(null, xhr.response)
+              }
+            };
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.onerror = function() {
+              done(xhr.responseText)
+            };
+            xhr.send(body);
+          };
+        ajax('POST', '/bulkimport/send', passwords, function(err, response) {
+            if (err) throw err;
+            if (response == "Success") {
+                location.reload()
+            } else {
+                alert("Error. Contact developer.")
+            }
+        })
+    }
+</script>

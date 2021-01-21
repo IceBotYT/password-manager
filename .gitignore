@@ -1,0 +1,7 @@
+.env
+node_modules
+passwords
+users.db
+logs
+test.js
+passwords.json

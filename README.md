@@ -67,6 +67,6 @@ Any issues? Submit an issue below.
 
 ### Questions & Issues
 
-Questions and issues can be sent over on my [issues page.](https://github.com/IceBotYT/Password-Manager-2.0/issues)
+Questions and issues can be sent over on my [issues page.](https://github.com/IceBotYT/password-manager/issues)
 
 ###### Thank you for using my password manager ♥

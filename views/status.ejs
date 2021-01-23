@@ -176,6 +176,9 @@
             problem: text
           }
           ajax("POST", '/status', body, function(err, res) {
+            if (res == "Not enabled") {
+              return esnackbar("Sorry, the owner has not enabled issue reporting.")
+            }
             if (err) {
               esnackbar("Something went wrong, try again later.")
               throw err;

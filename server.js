@@ -1,3 +1,4 @@
+var ifttt = false;
 // DO NOT DELETE
 
 if (process.env.NODE_ENV !== 'production') {
@@ -285,8 +286,9 @@ app.get('/deleteacc', async (req, res) => {
   const body = {
     value1: (await getUserById(req.query.id)).name
   }
+  if (ifttt) {
   axios
-      .post('https://maker.ifttt.com/trigger/pman_del/with/key/cNZQSJyfbxBT3DaurG65DI', body)
+      .post('https://maker.ifttt.com/trigger/pman_del/with/key/' + process.env.IFTTT, body)
       .then(response => {
         if (response.data == "Congratulations! You've fired the pman_del event") {
           res.send("Success")
@@ -295,6 +297,7 @@ app.get('/deleteacc', async (req, res) => {
       .catch(err => {
         res.status(500).send("Error")
       })
+    }
   var userId = req.query.id
   var dbForUser = new Datastore('./passwords/' + userId + '.db')
   dbForUser.loadDatabase()
@@ -354,13 +357,16 @@ app.get('/status', checkAuthenticated, (req, res) => {
 // Report issue
 
 app.post('/status', checkAuthenticated, async (req, res) => {
+  if (!ifttt) {
+    return res.send("Not enabled")
+  }
     const bodyR = req.body
     const body = {
       value1: bodyR.problem,
       value2: (await getUserById(req._passport.session.user)).name
     }
     axios
-      .post('https://maker.ifttt.com/trigger/pman_issue/with/key/cNZQSJyfbxBT3DaurG65DI', body)
+      .post('https://maker.ifttt.com/trigger/pman_issue/with/key/' + process.env.IFTTT, body)
       .then(response => {
         if (response.data == "Congratulations! You've fired the pman_issue event") {
           res.send("Success")
@@ -369,6 +375,10 @@ app.post('/status', checkAuthenticated, async (req, res) => {
       .catch(err => {
         res.status(500).send("Error")
       })
+  })
+
+  app.get('/lights', (req, res) => {
+    res.sendFile('/home/pi/PassMan/Password-Manager-2.0/polar-lights-5858656_1920.jpg')
   })
 
   // Check authentication

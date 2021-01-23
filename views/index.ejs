@@ -1,4 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+  <meta charset="utf-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
   <style>
     footer {
       background-color: rgb(0, 255, 0);
@@ -62,15 +67,16 @@
 </head>
 <body>
 <h1>Hi <%= name %>!</h1>
-<button onclick="location = '/database'">Access my passwords</button><br><br>
-<a href="https://darkreader.org/" target="_blank">Need Dark Mode? Use this</a>
-<hr size="2" width="1150">
+<button onclick="location = '/database'" class="btn btn-primary">Access my passwords</button><br><br>
+<!-- <a href="https://darkreader.org/" target="_blank">Need Dark Mode? Use this</a> -->
+<hr width="100%">
 <p>Danger zone</p>
-<button onclick="deleteAccount();">Delete your account :(</button>
+<button onclick="deleteAccount();" class="btn btn-danger">Delete your account :(</button>
 <br><br>
 <form action="/logout" method="GET" id="form">
-  <button type="submit">Log Out</button>
+  <button type="submit" class="btn btn-light">Log Out</button>
 </form>
+<br>
 <div id="snackbar">%PLACEHOLDER_ALERT%</div>
 <script>
   function snackbar(text) {
@@ -102,3 +108,4 @@
 </script>
 </body>
 <a href="/status" target="_blank"><footer><p>Did you know we have a status page? Click this banner for more</p></footer></a>
+</html>

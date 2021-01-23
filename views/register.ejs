@@ -1,7 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta name="viewport" content="width=device-width, inital-scale=1">
+  <meta charset="utf-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  <title>Register</title>
+  <style>
+    html {
+      padding: 0px;
+      margin: 0px;
+      background-color: white;
+      color: black;
+      font-size: 20px;
+      z-index: 1;
+    }
+    #login-form {
+      z-index: 2;
+    }
+    #bg {
+      width: 100%;
+      height: 100%;
+      object-fit: 50% 50%;
+      background-size: cover;
+    }
+    .crop {
+      width: 100%;
+      height: 722px;
+      overflow: hidden;
+    }
+    /* The snackbar - position it at the bottom and in the middle of the screen */
+    #snackbar {
+            visibility: hidden; /* Hidden by default. Visible on click */
+            min-width: 250px; /* Set a default minimum width */
+            margin-left: -125px; /* Divide value of min-width by 2 */
+            background-color: #333; /* Black background color */
+            color: #fff; /* White text color */
+            text-align: center; /* Centered text */
+            border-radius: 2px; /* Rounded borders */
+            padding: 16px; /* Padding */
+            position: fixed; /* Sit on top of the screen */
+            z-index: 1; /* Add a z-index if needed */
+            left: 50%; /* Center the snackbar */
+            bottom: 30px; /* 30px from the bottom */
+          }
+  
+          /* Show the snackbar when clicking on a button (class added with JavaScript) */
+          #snackbar.show {
+            visibility: visible; /* Show the snackbar */
+            /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+            However, delay the fade out process for 2.5 seconds */
+            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+          }
+          /* Animations to fade the snackbar in and out */
+          @-webkit-keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+          }
+  
+          @keyframes fadein {
+            from {bottom: 0; opacity: 0;}
+            to {bottom: 30px; opacity: 1;}
+          }
+  
+          @-webkit-keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+          }
+  
+          @keyframes fadeout {
+            from {bottom: 30px; opacity: 1;}
+            to {bottom: 0; opacity: 0;}
+          }
+          #register-form {
+            width: 450px;
+            height: 230px;
+            position: absolute;
+            top: 30%;
+            left: 35%;
+            margin-left: -30px;
+            margin-top: -10px;
+            background-color: black;
+            border-radius: 10px;
+            size: 50%;
+            color: white;
+          }
+
+          #register-content {
+            top: 5%;
+            left: 5%;
+            position: absolute;
+          }
+          .background {
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            z-index: 0;
+          }
+  </style>
 </head>
-<title>Register</title>
 <h1>Register</h1>
 <form action="/register" method="POST">
   <div>
@@ -16,6 +115,7 @@
     <label for="password">Password</label>
     <input type="password" id="password" name="password" required>
   </div>
-  <button type="submit">Register</button>
+  <button type="submit" class="btn btn-primary mr-1">Register</button>
+  <a href="/login" class="btn btn-info">Login</a>
 </form>
-<a href="/login">Login</a>
+</html>

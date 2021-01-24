@@ -18,17 +18,16 @@
     #login-form {
       z-index: 2;
     }
-    #bg {
-      width: 100%;
-      height: 100%;
-      object-fit: 50% 50%;
-      background-size: cover;
-    }
-    .crop {
-      width: 100%;
-      height: 722px;
-      overflow: hidden;
-    }
+    img {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+          }
+
+          .crop {
+            max-height: 0px;
+            overflow: hidden;
+          }
     /* The snackbar - position it at the bottom and in the middle of the screen */
     #snackbar {
             visibility: hidden; /* Hidden by default. Visible on click */
@@ -99,9 +98,23 @@
             top: 75%;
             left: 30%
           }
+          .landscape {
+            background-position: center center;
+            background-color: white;
+            z-index: 100;
+            width: 0px;
+            height: 0px;
+            display: none;
+          }
   </style>
+  <script src="https://kit.fontawesome.com/d2dd9afdb0.js" crossorigin="anonymous"></script>
 </head>
 <body>
+<div class="landscape container">
+  <i class="fas fa-exclamation-triangle fa-5x" style="position: fixed; left: 35%; top: 25%"></i>
+  <p class="text-center" style="position: fixed; top:50%">For a better experience, please rotate your device.</p>
+</div>
+<div id="good">
 <div id="register-form" class="container">
 <h1 class="text-center">Register</h1>
 <form action="/register" method="POST" style="width:fit-content;">
@@ -125,18 +138,68 @@
 </div>
 <script>
   window.onload = function() {
+    if(window.innerHeight > window.innerWidth){
+      var alert = document.getElementsByClassName("landscape")
+      var main = document.getElementById('good')
+      alert[0].style.width = window.innerWidth + "px"
+      alert[0].style.height = window.innerHeight + "px"
+      main.style.display = "none";
+      alert[0].style.display = "block";
+    }
     Particles.init({
       selector: '.background',
-      connectParticles: true,
+      // connectParticles: true,
       color: "#4DB3B3",
       maxParticles: 250
     })
+    if (window.innerWidth < 1500) {
+      var crop = document.getElementsByClassName("crop")
+      var bg = document.getElementsByClassName("background")
+      var div = document.getElementById('register-form')
+      bg[0].style.display = "none";
+      crop[0].style.display = "none";
+      div.style.left = "20%"
+      div.style.width = "500px"
+      div.style.height = "400px"
+    }
+    var crop = document.getElementsByClassName("crop")
+    crop[0].style.maxHeight = window.innerHeight + "px"
+    crop[0].style.maxWidth = window.innerWidth + "px"
+  }
+  window.onresize = function() {
+    setTimeout(function() { // iOS sucks
+      if(window.innerHeight > window.innerWidth){
+      var alert = document.getElementsByClassName("landscape")
+      var main = document.getElementById('good')
+      alert[0].style.width = window.innerWidth + "px"
+      alert[0].style.height = window.innerHeight + "px"
+      main.style.display = "none";
+      alert[0].style.display = "block";
+    } else {
+      var alert = document.getElementsByClassName('landscape')
+      var good = document.getElementById('good')
+      alert[0].style.display = "none";
+      good.style.display = "block";
+    }
+    if (window.innerWidth < 1500) {
+      var crop = document.getElementsByClassName("crop")
+      var bg = document.getElementsByClassName("background")
+      var div = document.getElementById("register-form")
+      bg[0].style.display = "none";
+      crop[0].style.display = "none";
+      div.style.left = "20%"
+    }
+    var crop = document.getElementsByClassName("crop")
+    crop[0].style.maxHeight = window.innerHeight + "px"
+    crop[0].style.maxWidth = window.innerWidth + "px"
+    }, 100)
   }
 </script>
-<div id="bg-div" class="crop">
-  <img src="/lights" id="bg">
+<div class="crop">
+  <img src="/lights">
   </div>
 <canvas class="background"></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.2/particles.min.js"></script>
+</div>
 </body>
 </html>

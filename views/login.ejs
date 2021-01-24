@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, inital-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="utf-8">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
@@ -17,17 +17,7 @@
     #login-form {
       z-index: 2;
     }
-    #bg {
-      width: 100%;
-      height: 100%;
-      object-fit: 50% 50%;
-      background-size: cover;
-    }
-    .crop {
-      width: 100%;
-      height: 722px;
-      overflow: hidden;
-    }
+
     /* The snackbar - position it at the bottom and in the middle of the screen */
     #snackbar {
             visibility: hidden; /* Hidden by default. Visible on click */
@@ -98,8 +88,20 @@
             top: 75%;
             left: 30%
           }
+
+          img {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+          }
+
+          .crop {
+            max-height: 0px;
+            overflow: hidden;
+          }
   </style>
   <title>Login</title>
+  <meta http-equiv=”Page-Enter” content=”blendtrans(duration=1.5)” /> <meta http-equiv=”Page-Exit” content=”blendtrans(duration=1.5″ /> 
 </head>
 <body>
 <div id="login-form" class="container">
@@ -129,10 +131,18 @@
   window.onload = function() {
     Particles.init({
       selector: '.background',
-      connectParticles: true,
-      color: "#4DB3B3",
-      maxParticles: 250
+      // connectParticles: true,
+      color: "#FFFFFF",
+      maxParticles: 150
     })
+    var crop = document.getElementsByClassName("crop")
+    crop[0].style.maxHeight = window.innerHeight + "px"
+    crop[0].style.maxWidth = window.innerWidth + "px"
+  }
+  window.onresize = function() {
+    var crop = document.getElementsByClassName("crop")
+    crop[0].style.maxHeight = window.innerHeight + "px"
+    crop[0].style.maxWidth = window.innerWidth + "px"
   }
   var messages = <%- `"${messages.error}"` %>
   if (messages == "undefined") {
@@ -181,8 +191,9 @@
     })
   }
 </script>
-<div id="bg-div" class="crop">
-<img src="/lights" id="bg">
+<!-- <div class="image"></div> -->
+<div class="crop" id="crop">
+<img src="/lights">
 </div>
 <canvas class="background"></canvas>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.2/particles.min.js"></script>

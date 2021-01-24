@@ -1,4 +1,4 @@
-var ifttt = false;
+var ifttt = true;
 // DO NOT DELETE
 
 if (process.env.NODE_ENV !== 'production') {
@@ -162,8 +162,10 @@ if (process.env.NODE_ENV !== 'production') {
           name: sanitizeHtml(req.query.name),
           password: encrypt(sanitizeHtml(req.query.password))
       }
-      dbForUser.insert(entry)
-      res.redirect('/database?created=true')
+      dbForUser.insert(entry, function(err, doc) {
+        if (err) return res.redirect('/database?error=true')
+        res.redirect('/database?created=true')
+      })
   })
 
   // Delete a certain entry
@@ -377,8 +379,32 @@ app.post('/status', checkAuthenticated, async (req, res) => {
       })
   })
 
+  // Background
+
   app.get('/lights', (req, res) => {
     res.sendFile('/home/pi/PassMan/Password-Manager-2.0/polar-lights-5858656_1920.jpg')
+  })
+
+  // Bulk delete
+
+  app.get('/bulkdel', (req, res) => {
+    var dbForUser = new Datastore('./passwords/' + req._passport.session.user + '.db')
+    dbForUser.loadDatabase()
+    var error;
+    var arr = req.query.del.split(',')
+    for (let code in arr) {
+      dbForUser.remove({ code: arr[code] }, {}, (err, n) => {
+        if (err || n == 0) {
+          console.log("error :(")
+          error = true;
+        }
+      })
+    }
+    if (!error) {
+      res.status(200).send("Success")
+    } else {
+      res.status(500).send("Error")
+    }
   })
 
   // Check authentication

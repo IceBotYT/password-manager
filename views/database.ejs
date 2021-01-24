@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <style>
     /* The Close Button */
 .close {
@@ -169,17 +171,79 @@
           background-color: rgb(70,55,55); /* Fallback color */
           background-color: rgba(70, 55, 55, 0.4); /* Black w/ opacity */
     }
-</style> <link rel="stylesheet" href="/loadingdot"> <title>My Passwords</title> <meta name="viewport" content="width=device-width, inital-scale=1"> </head>
+    .table-condensed{
+      font-size: 15px;
+    }
+    .table td.fit, 
+    .table th.fit {
+      white-space: nowrap;
+      width: 1%;
+    }
+    #newPass {
+      width: max-content;
+      margin: 5px;
+      border-radius: 10px;
+      height: max-content;
+    }
+    #passBack {
+      background-color: lightseagreen;
+      min-width: min-content;
+      max-width: 160px;
+      width: 75%;
+      border-radius: 5px;
+      position: absolute;
+      left: 40%;
+      top: -14%;
+      animation-name: moveUp;
+      animation-duration: 1s;
+    }
+
+    #passBack:hover {
+      animation-name: moveDown;
+      animation-duration: 1s;
+      top: -1%;
+    }
+
+    @keyframes moveDown {
+      from {top: -14%;}
+      to {top: -1%;}
+    }
+
+    @keyframes moveUp {
+      from {top: -1%;}
+      to {top: -14%;}
+    }
+
+    #tab {
+      position: absolute;
+      background-color: lightseagreen;
+      border-radius: 5px;
+      top: 95%;
+      left: 40%;
+      width: 60px;
+      height: 40px;
+    }
+</style>
+<link rel="stylesheet" href="/loadingdot">
+<title>My Passwords</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<script src="https://kit.fontawesome.com/d2dd9afdb0.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js" crossorigin="anonymous"></script>
+</head>
 
 <body onload="display();">
     <div id="veil" class="veil"></div>
-    <h1>My Passwords</h1>
-    <button type="button" data-toggle="modal" data-target="#newModal" class="btn btn-success">Add Password <strong>+</strong></button><br><br>
+    <div class="jumbotron">
+    <h1 class="text-center">My Passwords</h1>
+    </div>
+    <button type="button" data-toggle="modal" data-target="#newModal" class="btn btn-success"><i class="fas fa-plus-square"></i></button><br><br>
     <form action="/database/search">
-      <input name="q" aria-placeholder="Search...">
-      <input type="submit" value="🔎" class="btn btn-info">
+      <input name="q" placeholder="Search..." required>
+      <button type="submit" class="btn btn-info"><i class="fas fa-search"></i></button>
     </form>
-    
+    <div id="passBack">
+    <div id="tab"></div>
+    <div id="newPass">
     <p>Generate new password:</p>
     <label for="dPassLength">Length:</label>
     <input type="number" value="32" id="dPassLength">
@@ -188,97 +252,118 @@
     <button class="popup btn btn-primary" onclick="generatePassword();">Generate
       <span class="popuptext" id="passwordPopup">Copied to clipboard!</span>
     </button>
-    <br><br>
-    <div class="container">
-    <table style="width: auto;" class="table table-bordered table-condensed table-responsive">
+    </div>
+    </div>
+    <button onclick="bulkDelete()" class="btn btn-danger" id="bulkDel" disabled><i class="fas fa-trash"></i> <span class="badge badge-light" id="bulkAm">0</span></button><br>
+    <button onclick="location = '/'" class="btn btn-light"><i class="fas fa-arrow-left"></i></button><br><br>
+    <table class="table table-bordered table-condensed table-responsive" style="table-layout: auto;">
       <thead>
         <tr>
-            <th scope="col"><input type="checkbox" onchange="checkAll(this)"></th>
-            <th scope="col">Code</th>
-            <th scope="col">Link</th>
-            <th scope="col">Username</th>
-            <th scope="col">Password</th>
-            <th scope="col">Buttons</th>
+            <th scope="col" class="fit" style="width: 1%;"><input type="checkbox" onchange="checkAll(this)"></th>
+            <th scope="col" class="fit">Code</th>
+            <th scope="col" class="fit">Link</th>
+            <th scope="col" class="fit">Username</th>
+            <th scope="col" class="fit">Password</th>
+            <th scope="col" class="fit">Buttons</th>
         </tr>
         </thead>
-        <tbody id="table">
-
-        </tbody>
+        <tbody id="table"></tbody>
       </table>
-      </div><br><br>
-    <button onclick="location = '/'"><strong><</strong> Go Back</button><br>
-    <div id="typeModal" class="modal">
-        <div class="modal-content w3-animate-top">
-          <span class="close" id="typeClose">&times;</span>
-          <p>What would you like to change?</p>
-          <input type="radio" id="code" name="type" value="code">
-          <label for="code">Code</label><br>
-          <input type="radio" id="link" name="type" value="link">
-          <label for="link">Link</label><br>
-          <input type="radio" id="name" name="type" value="name">
-          <label for="name">Name</label><br>
-          <input type="radio" id="ipassword" name="type" value="ipassword">
-          <label for="ipassword">Input Password</label><br>
-          <input type="radio" id="rpassword" name="type" value="rpassword">
-          <label for="rpassword">Random Password</label><br>
-          <button id="typeSubmit">Next</button>
+    <br><br>
+    <button onclick="location = '/'" class="btn btn-light"><i class="fas fa-arrow-left"></i></button><br>
+    <div id="typeModal" class="modal fade">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <p class="modal-title">What would you like to change?</p>
+            <span class="close" data-dismiss="modal">&times;</span>
+          </div>
+          <div class="modal-body">
+            <input type="radio" id="code" name="type" value="code">
+            <label for="code">Code</label><br>
+            <input type="radio" id="link" name="type" value="link">
+            <label for="link">Link</label><br>
+            <input type="radio" id="name" name="type" value="name">
+            <label for="name">Name</label><br>
+            <input type="radio" id="ipassword" name="type" value="ipassword">
+            <label for="ipassword">Input Password</label><br>
+            <input type="radio" id="rpassword" name="type" value="rpassword">
+            <label for="rpassword">Random Password</label><br>
+          </div>
+          <div class="modal-footer">
+            <button id="typeSubmit" class="btn btn-primary">Next</button>
+          </div>
         </div>
       </div>
-      <div id="changeModal" class="modal">
-        <div class="noanim-modal-content">
-          <span class="close" id="changeClose">&times;</span>
-          <p>What do you want to update it to?</p>
-          <input type="text" id="change" name="change">
-          <button id="changeSubmit">Submit</button>
+    </div>
+      <div id="changeModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <p>What do you want to update it to?</p>
+              <span class="close" id="changeClose" data-dismiss="modal">&times;</span>
+            </div>
+            <div class="modal-body">
+              <input type="text" id="change" name="change">
+            </div>
+            <div class="modal-footer">
+              <button id="changeSubmit" class="btn btn-success">Submit</button>
+            </div>
+          </div>
         </div>
       </div>
-      <div id="passModal" class="modal">
-        <div class="noanim-modal-content">
-          <span class="close" id="passClose">&times;</span>
-          <p>Is this a good password?<br>If not, please select "Generate New".</p><br>
-          <p id="newRPass"></p><br>
-          <label for="passLength">Length:</label>
-          <input type="number" id="passLength" value="32">
-          <label for="alphabet">Alphabet:</label>
-          <input type="text" id="alphabet" value="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()-_=+[]';:/?.,">
-          <button id="genNew">Generate New</button><br>
-          <button id="passGood">Looks good!</button>
+      <div id="passModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <p>Is this a good password?<br>If not, please select "Generate New".</p>
+              <span class="close" id="passClose" data-dismiss="modal">&times;</span>
+            </div>
+            <div class="modal-body">
+              <p id="newRPass"></p>
+              <label for="passLength">Length:</label>
+              <input type="number" id="passLength" value="32">
+              <label for="alphabet">Alphabet:</label>
+              <input type="text" id="alphabet" value="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789!@#$%^&*()-_=+[]';:/?.,">
+              <button id="genNew" class="btn btn-info">Generate New</button><br>
+            </div>
+            <div class="modal-footer">
+              <button id="passGood" class="btn btn-success text-center">Looks good!</button>
+            </div>
+          </div>
         </div>
       </div>
       <div id="newModal" class="modal fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-          <h1>New Password
-            <div class="text-right">
-              <span class="close inline" id="newClose">&times;</span>
-            </div>
-          </h1>
+          <h1>New Password</h1>
+          <span class="close inline" id="newClose" data-dismiss="modal">&times;</span>
           </div>
           <div class="modal-body">
           <form action="/database/create">
             <div class="form-group">
-            <label for="code">Code</label><br>
-            <input id="newCode" name="code" type="text" class="form-control" required><br><br>
+            <label for="code">Code</label>
+            <input id="newCode" name="code" type="text" class="form-control" required>
             </div>
             <div class="form-group">
-            <label for="link">Link</label><br>
-            <input id="newLink" name="link" type="url" class="form-control" required><br><br>
+            <label for="link">Link</label>
+            <input id="newLink" name="link" type="url" class="form-control" required>
             </div>
             <div class="form-group">
-            <label for="name">Name</label><br>
-            <input id="newName" name="name" type="text" class="form-control" required><br><br>
+            <label for="name">Name</label>
+            <input id="newName" name="name" type="text" class="form-control" required>
             </div>
             <div class="form-group">
-            <label for="password">Password</label><br>
-            <input id="newPassword" name="password" type="password" class="form-control" required><br><br>
+            <label for="password">Password</label>
+            <input id="newPassword" name="password" type="password" class="form-control" required>
             </div>
           </div>
           <div class="modal-footer">
             <div class="form-group">
             <input type="submit" value="Create" id="newSubmit" class="btn btn-success">
             </div>
-            </div>
+          </div>
           </form>
         </div>
       </div>
@@ -301,31 +386,46 @@
       </svg>
       <div id="snackbar">%PLACEHOLDER_ALERT%</div>
       <script>
-        var created = new URLSearchParams(window.location.search).get('created')
-        if (created) snackbar("Entry created sucessfully!");
-        var deleted = new URLSearchParams(window.location.search).get('deleted')
-        if (deleted) snackbar("Entry deleted successfully!");
-        var error = new URLSearchParams(window.location.search).get('error')
-        if (error) snackbar("An error occured while performing that action.")
-        var updated = new URLSearchParams(window.location.search).get('updated')
-        if (updated) snackbar("Entry updated successfully!")
-        function snackbar(text) {
-          if (text == null) {
-            throw new Error("Text argument is needed")
+
+        window.onkeydown = function (e) {
+          if (e.code == "Escape") {
+            $('.modal').modal('hide');
           }
-          var snackbar = document.getElementById('snackbar')
-          snackbar.innerHTML = text
-          snackbar.className = "show";
-          setTimeout(function() { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
         }
+
           function display() { 
+
+            var created = new URLSearchParams(window.location.search).get('created')
+        if (created) swal({
+          title: "Entry created successfully!",
+          icon: "success"
+        })
+        var deleted = new URLSearchParams(window.location.search).get('deleted')
+        if (deleted) swal({
+          title: "Entry deleted successfully!",
+          icon: "success"
+        })
+        var error = new URLSearchParams(window.location.search).get('error')
+        if (error) swal({
+          title: "An error occured.",
+          icon: "error"
+        })
+        var updated = new URLSearchParams(window.location.search).get('updated')
+        if (updated) swal({
+          title: "Entry updated successfully!",
+          icon: "success"
+        })
+        var bulkdel = new URLSearchParams(window.location.search).get('bulkdel')
+        if (bulkdel) swal({
+          title: "Multiple entries deleted succesfully!",
+          icon: "success"
+        })
             
-        
         // Displaying results timee
         var results = <%-JSON.stringify(db)%>
         if (results.length == 0) {
           alert("No passwords in your database. Please create a new password in the following dialog.")
-          newPassword()
+          $('#newModal').modal('show')
         }
           var table = document.getElementById('table')
           function ajax(method, url, done) {
@@ -352,14 +452,15 @@
   
               ajax('GET', '/database/decrypt?password=' + JSON.stringify(result.password), function(err, data) {
                 if (err) throw err;
-                cell4.innerHTML = data + ` <button onclick="copy('`+ data + `')">Copy</button>`
-                cell5.innerHTML = `<button onclick='deleteEntry("` + result.code + `")'>Delete</button> <button onclick='edit("` + result.code + `")'>Edit</button> <button onclick='copyopen("` + result.link + `", "`+ data + `")'>CopyOpen</button>`
+                cell4.innerHTML = "•••••••" + ` <button onclick="copy('`+ data + `')" class="btn btn-primary btn-sm" style="display: inline-block;"><i class="far fa-copy"></i></button>`
+                cell5.innerHTML = `<div class='btn-group'><button onclick='deleteEntry("` + result.code + `")' class='btn btn-danger btn-sm'><i class="fas fa-trash"></i></button> <button onclick="edit('` + result.code + `')" data-toggle="modal" data-target="#typeModal" class='btn btn-info btn-sm'><i class="fas fa-edit"></i></button> <button onclick='copyopen("` + result.link + `", "`+ data + `")' class='btn btn-secondary btn-sm'><i class="fas fa-copy"></i></button></div>`
               })
-  
+              
+              cell4.style.width = "100px"
               cell0.innerHTML = '<input type="checkbox" id="' + result.code + '" onchange="checkmarks(this)" scope="row">'
               cell1.innerHTML = result.code
-              cell2.innerHTML = result.link + " <a href=" + result.link + ">Open</a>"
-              cell3.innerHTML = result.name + ` <button onclick='copy("` + result.name + `")'>Copy</button>`
+              cell2.innerHTML = result.link + " <a href=" + result.link + " class='btn btn-primary btn-sm' target='_blank'><i class='fas fa-door-open'></i></a>"
+              cell3.innerHTML = result.name + ` <button onclick='copy("` + result.name + `")' class='btn btn-primary btn-sm'><i class="far fa-copy"></i></button>`
           });
           document.getElementById('load-dots').style.display = "none";
           document.getElementById('veil').style.display = "none";
@@ -436,7 +537,6 @@
           var changeSubmit = document.getElementById('changeSubmit')
           var passSubmit = document.getElementById('passGood')
           var genNew = document.getElementById('genNew')
-          typeModal.style.display = "block";
 
           function clearType() {
             document.getElementById('code').checked = false;
@@ -454,52 +554,10 @@
             document.getElementById('newRPass').innerHTML = "";
           }
 
-          typeSpan.onclick = function() {
-            clearType()
-            typeModal.style.display = "none";
-          }
-
-          window.onclick = function(event) {
-            if (event.target == typeModal) {
-              clearType()
-              typeModal.style.display = "none";
-            }
-          }
-
-          changeClose.onclick = function() {
-            clearSubmit()
-            clearType()
-            clearPass()
-            changeModal.style.display = "none";
-          }
-          window.onclick = function(event) {
-            if (event.target == changeModal) {
-              clearSubmit()
-              clearType()
-              clearPass()
-              typeModal.style.display = "none";
-            }
-          }
-
-          passClose.onclick = function() {
-            clearType()
-            clearPass()
-            clearSubmit()
-            passModal.style.display = "none";
-          }
-          window.onclick = function(event) {
-            if (event.target == passModal) {
-              clearSubmit()
-              clearType()
-              clearPass()
-              passModal.style.display = "none";
-            }
-          }
-
           var type;
 
           typeSubmit.onclick = function() {
-            typeModal.style.display = "none";
+            $('#typeModal').modal('hide')
 
             if (document.getElementById('code').checked) {
               type = "code";
@@ -515,7 +573,7 @@
             }
 
             if (type !== "rpassword") {
-              changeModal.style.display = "block";
+              $('#changeModal').modal('show')
             } else {
               var length = document.getElementById('passLength').value,
                   charset = document.getElementById('alphabet').value,
@@ -525,7 +583,7 @@
                 retVal += charset.charAt(Math.floor(Math.random() * n))
               }
               document.getElementById('newRPass').innerHTML = retVal;
-              passModal.style.display = "block";
+              $('#passModal').modal('show')
             }
           }
 
@@ -548,11 +606,13 @@
             if (!yn) {
               clearSubmit()
               clearType()
-              snackbar("Cancelled.")
-              return changeModal.style.display = "none";
+              swal({
+                title: "Cancelled.",
+                icon: "success"
+              })
+              return $('#changeModal').modal('hide')
             }
-            snackbar("This may take a moment...")
-            changeModal.style.display = "none";
+            $('#changeModal').modal('hide')
             document.getElementById('load-dots').style.display = "block";
             document.getElementById('veil').style.display = "block";
 
@@ -592,11 +652,13 @@
               clearSubmit()
               clearType()
               clearPass()
-              snackbar("Cancelled.")
-              return passModal.style.display = "none";
+              swal({
+                title: "Cancelled.",
+                icon: "success"
+              })
+              return $('#passModal').modal('hide')
             }
-            snackbar("This may take a moment...")
-            passModal.style.display = "none";
+            $('#passModal').modal('hide')
             document.getElementById('load-dots').style.display = "block";
             document.getElementById('veil').style.display = "block";
 
@@ -680,7 +742,13 @@
             }
           }
         }
-        console.log(marks)
+        if (marks.length >= 1) {
+          document.getElementById('bulkDel').disabled = false;
+          document.getElementById('bulkAm').innerHTML = marks.length;
+        } else {
+          document.getElementById('bulkDel').disabled = true;
+          document.getElementById('bulkAm').innerHTML = 0;
+        }
       }
       
       function checkAll(ele) {
@@ -694,7 +762,6 @@
                  }
              }
          }
-         
      } else {
          for (var i = 0; i < checkboxes.length; i++) {
              if (checkboxes[i].type == 'checkbox') {
@@ -705,7 +772,52 @@
              }
          }
      }
-     console.log(marks)
+     if (marks.length >= 1) {
+          document.getElementById('bulkDel').disabled = false;
+          document.getElementById('bulkAm').innerHTML = marks.length;
+        } else {
+          document.getElementById('bulkDel').disabled = true;
+          document.getElementById('bulkAm').innerHTML = 0;
+        }
+ }
+
+ function bulkDelete() {
+  function ajax(method, url, done) {
+            var xhr = new XMLHttpRequest();
+            xhr.open(method, url)
+            xhr.onreadystatechange = function() {
+              if (this.status == 200 && this.readyState == 4) {
+                done(null, xhr.responseText)
+              }
+            };
+            xhr.onerror = function() {
+              done(xhr.response)
+            };
+            xhr.send();
+          };
+   swal(`Are you sure you want to delete ${marks.length} items?`, {
+     buttons: true,
+     icon: "warning",
+     dangerMode: true
+   })
+   .then((value) => {
+     if (value) {
+      document.getElementById('load-dots').style.display = "block";
+      document.getElementById('veil').style.display = "block";
+      ajax('GET', '/bulkdel?del=' + marks, function(err, res) {
+        if (res == "Success" && !err) {
+          location = '/database?bulkdel=true'
+        } else if (err) {
+          throw err;
+          location = '/database?error=true'
+        } else {
+          location = '/database?error=true'
+        }
+      })
+     } else {
+       swal("Cancelled.")
+     }
+   })
  }
       </script>
 </body>

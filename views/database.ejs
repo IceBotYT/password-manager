@@ -459,7 +459,7 @@
               cell4.style.width = "100px"
               cell0.innerHTML = '<input type="checkbox" id="' + result.code + '" onchange="checkmarks(this)" scope="row">'
               cell1.innerHTML = result.code
-              cell2.innerHTML = result.link + " <a href=" + result.link + " class='btn btn-primary btn-sm' target='_blank'><i class='fas fa-door-open'></i></a>"
+              cell2.innerHTML = result.link + " <button onclick='openNew(`" + result.link + "`)' class='btn btn-primary btn-sm'><i class='fas fa-door-open'></i></button>"
               cell3.innerHTML = result.name + ` <button onclick='copy("` + result.name + `")' class='btn btn-primary btn-sm'><i class="far fa-copy"></i></button>`
           });
           document.getElementById('load-dots').style.display = "none";
@@ -692,31 +692,27 @@
           }
       }
 
-      function newPassword() {
-        var newModal = document.getElementById('newModal')
-        var newClose = document.getElementById('newClose')
-        var newSubmit = document.getElementById('newSubmit')
-
-        newModal.style.display = "block";
-
-        function clear() {
-          document.getElementById('newCode').value = "";
-          document.getElementById('newLink').value = "";
-          document.getElementById('newName').value = "";
-          document.getElementById('newPassword').value = "";
+      function openNew(link) {
+        function validURL(str) {
+        var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+          '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+          '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+          '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        return !!pattern.test(str);
         }
-
-        newClose.onclick = function() {
-          clear()
-          newModal.style.display = "none";
+        if (validURL(link)) {
+          var newLink = link.replace(/(http\:\/\/|https\:\/\/)/g, '')
+          window.open('http\://'.concat(newLink))
+        } else if (link == "") {
+          return;
+        } else {
+          swal({
+            title: "Invalid URL!",
+            icon: "error"
+          })
         }
-
-        window.onclick = function(event) {
-            if (event.target == newModal) {
-              clear()
-              newModal.style.display = "none";
-            }
-          }
       }
 
       function generatePassword() {

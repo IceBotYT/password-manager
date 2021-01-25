@@ -1,4 +1,4 @@
-# Password Manager 2.0
+# Password Manager 2.0 (BETA)
 
 
 ### Installing

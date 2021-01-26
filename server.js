@@ -23,8 +23,7 @@ if (process.env.NODE_ENV !== 'production') {
 
   // Load databases
   
-  const users = new Datastore('users.db')
-  users.loadDatabase();
+  const users = new Datastore({ filename: 'users.db', autoload: true })
 
   // Set up authentication library
 

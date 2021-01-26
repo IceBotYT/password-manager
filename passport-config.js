@@ -29,7 +29,7 @@ async function initialize(passport, users) {
       if (await bcrypt.compare(password, user.password)) {
         return done(null, user)
       } else {
-        return done(null, false, { message: 'Password incorrect' })
+        return done(null, false, { message: 'Password incorrect ' + email })
       }
     } catch (e) {
       return done(e)

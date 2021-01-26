@@ -84,7 +84,7 @@ if (process.env.NODE_ENV !== 'production') {
 // Home page
   
   app.get('/', checkAuthenticated, async (req, res) => {
-    res.render('index.ejs', { name: (await getUserById(req._passport.session.user)).name })
+    res.render('index.ejs', { name: (await getUserById(req._passport.session.user)).name, incorrect: (await getUserById(req._passport.session.user)).incorrect })
   })
 
   // Login page
@@ -100,6 +100,34 @@ if (process.env.NODE_ENV !== 'production') {
     failureRedirect: '/login',
     failureFlash: true
   }))
+
+  // Failure counter
+
+  app.get('/fail', checkNotAuthenticated, (req, res) => {
+    users.find({ email: req.query.email }, function (err, docs) {
+      if (err) res.sendStatus(500)
+      if (docs[0].incorrect >= 1) {
+        users.update({ email: req.query.email }, { $set: { incorrect: docs[0].incorrect + 1 } }, {}, (err) => {
+          if (err) return res.sendStatus(500)
+          res.status(200).send((docs[0].incorrect + 1).toString())
+        })
+      } else {
+        users.update({ email: req.query.email }, { $set: { incorrect: 1 } }, {}, (err) => {
+          if (err) return res.sendStatus(500)
+          res.status(200).send("1")
+        })
+      }
+    })
+  })
+
+  // Reset
+
+  app.get('/reset', checkAuthenticated, (req, res) => {
+    users.update({ id: req._passport.session.user }, { $set: { incorrect: 0 } }, {}, (err) => {
+      if (err) return res.sendStatus(500)
+      res.send("Success")
+    })
+  })
 
   // Register page
   
@@ -176,7 +204,7 @@ if (process.env.NODE_ENV !== 'production') {
       dbForUser.loadDatabase()
       dbForUser.remove({ code: req.query.code }, {}, function (err, numRemoved) {
         if ((err) || (numRemoved === 0)) {
-          return res.status(500).send(err);
+          return res.sendStatus(500)
         }
         res.status(202).send("Success")
       })
@@ -195,52 +223,52 @@ if (process.env.NODE_ENV !== 'production') {
           case "code":
               dbForUser.update({ code: req.query._code }, { $set: { code: sanitizeHtml(req.query.update) } }, {}, function (err, numReplaced) {
                 if (numReplaced == 0) {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 } else if (numReplaced == 1) {
                   res.status(200).send("Success")
                 } else if (err) {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 } else {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 }
               })
               break;
           case "link":
               dbForUser.update({ code: req.query._code }, { $set: { link: sanitizeHtml(req.query.update) } }, {}, function (err, numReplaced) {
                 if (numReplaced == 0) {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 } else if (numReplaced == 1) {
                   res.status(200).send("Success")
                 } else if (err) {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 } else {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 }
               })
               break;
           case "name":
               dbForUser.update({ code: req.query._code }, { $set: { name: sanitizeHtml(req.query.update) } }, {}, function (err, numReplaced) {
                 if (numReplaced == 0) {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 } else if (numReplaced == 1) {
                   res.status(200).send("Success")
                 } else if (err) {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 } else {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 }
               })
               break;
           case "password":
               dbForUser.update({ code: req.query._code }, { $set: { password: encrypt(sanitizeHtml(req.query.update)) } }, {}, function (err, numReplaced) {
                 if (numReplaced == 0) {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 } else if (numReplaced == 1) {
                   res.status(200).send("Success")
                 } else if (err) {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 } else {
-                  res.status(500).send()
+                  res.sendStatus(500)
                 }
               })
               break;
@@ -304,9 +332,9 @@ app.get('/deleteacc', async (req, res) => {
   var dbForUser = new Datastore('./passwords/' + userId + '.db')
   dbForUser.loadDatabase()
   dbForUser.remove({}, { multi: true }, function (err, numRemoved) {
-    if (err) return res.status(500).send()
+    if (err) return res.sendStatus(500)
     users.remove({ id: userId }, {}, function (err, numRemoved) {
-      if ((err) || (numRemoved == 0)) return res.status(500).send()
+      if ((err) || (numRemoved == 0)) return res.sendStatus(500)
       fs.rename('./passwords/' + userId + '.db', './passwords/removed' + userId + '.db', function() {})
       res.status(200).send("Success");
     })

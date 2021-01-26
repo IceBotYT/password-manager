@@ -153,6 +153,17 @@
     var form = document.getElementById('login-form')
     form.style.height = "320px";
   }
+  if (messages.startsWith("Password incorrect")) {
+    var alertBox = document.getElementById('alertBox')
+    ajax("GET", "/fail?email=" + messages.split(" ")[2], function (err, res) {
+      if (err) throw err;
+      if ((res - 0) > 3) {
+        alertBox.innerText = "Password incorrect. You have gotten the password incorrect " + res + " times."
+      } else {
+        alertBox.innerText = "Password incorrect"
+      }
+    })
+  }
   function ajax(method, url, done) {
             var xhr = new XMLHttpRequest();
             xhr.open(method, url)

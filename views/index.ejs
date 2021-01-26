@@ -64,6 +64,7 @@
   </style>
   <title>Dashboard</title>
   <meta name="viewport" content="width=device-width, inital-scale=1">
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <h1>Hi <%= name %>!</h1>
@@ -79,6 +80,41 @@
 <br>
 <div id="snackbar">%PLACEHOLDER_ALERT%</div>
 <script>
+  var incorrect = <%-incorrect%>
+  if (incorrect >= 1) {
+    swal({
+      title: "Immediate action recommended!",
+      text: incorrect + " attempts to access your account but failed since last time you signed in.",
+      icon: "warning"
+    })
+    .then((value) => {
+      ajax("GET", "/reset", function (err, res) {
+        if (err) throw err;
+        if (res == "Success") {
+          console.log("Successfully reset counter")
+        } else {
+          swal({
+            title: "Error",
+            text: "An error happened on the server while trying to reset your incorrect password counter. Try again later.",
+            icon: "error"
+          })
+        }
+      })
+    })
+  }
+  function ajax(method, url, done) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, url)
+    xhr.onreadystatechange = function() {
+      if (this.status == 200 && this.readyState == 4) {
+        done(null, xhr.responseText)
+      }
+    };
+    xhr.onerror = function() {
+      done(xhr.response)
+    };
+    xhr.send();
+  };
   function snackbar(text) {
     if (text == null) {
       throw new Error("Text argument is needed")

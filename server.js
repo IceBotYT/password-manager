@@ -20,6 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
   const sanitizeHtml = require('sanitize-html')
   const fs = require('fs')
   const axios = require('axios')
+  const { exec } = require('child_process')
 
   // Load databases
   
@@ -45,6 +46,38 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(passport.initialize())
   app.use(passport.session())
   app.use(methodOverride('_method'))
+
+  // Check for updates
+
+  console.log("Checking for updates..")
+  exec("git rev-parse HEAD", (err, stdout, stderr) => {
+    if (err) {
+      console.warn("Unable to check for updates! " + err)
+      return;
+    }
+    if (stderr) {
+      console.warn("Unable to check for updates! " + stderr)
+    }
+    stdout = stdout.replace('\n', '')
+    axios
+      .get('https://api.github.com/repos/IceBotYT/password-manager/commits/master', {
+        headers: {'Accept': 'application/json'}
+      })
+      .then(response => {
+        if (response.data.sha == stdout) {
+          console.log("Up to date!")
+        } else {
+          console.log(`Not up to date!
+          Version on server: ${response.data.sha}
+          Current version: ${stdout}
+          
+          Install updates using "git pull"`)
+        }
+      })
+      .catch(err => {
+        if (err) throw err;
+      })
+    })
 
   // Function to get a user by id
   

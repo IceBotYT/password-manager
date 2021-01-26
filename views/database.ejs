@@ -237,10 +237,8 @@
     <h1 class="text-center">My Passwords</h1>
     </div>
     <button type="button" data-toggle="modal" data-target="#newModal" class="btn btn-success"><i class="fas fa-plus-square"></i></button><br><br>
-    <form action="/database/search">
-      <input name="q" placeholder="Search..." required>
-      <button type="submit" class="btn btn-info"><i class="fas fa-search"></i></button>
-    </form>
+    <!-- <input name="q" placeholder="Search..." id="q" required>
+    <button type="button" onclick="search()" class="btn btn-info"><i class="fas fa-search"></i></button> -->
     <div id="passBack">
     <div id="tab"></div>
     <div id="newPass">
@@ -386,6 +384,11 @@
       </svg>
       <div id="snackbar">%PLACEHOLDER_ALERT%</div>
       <script>
+if(!('contains' in String.prototype)) {
+       String.prototype.contains = function(str, startIndex) {
+                return -1 !== String.prototype.indexOf.call(this, str, startIndex);
+       };
+ }
 
         window.onkeydown = function (e) {
           if (e.code == "Escape") {
@@ -459,6 +462,7 @@
               cell4.style.width = "100px"
               cell0.innerHTML = '<input type="checkbox" id="' + result.code + '" onchange="checkmarks(this)" scope="row">'
               cell1.innerHTML = result.code
+              cell1.name = "code"
               cell2.innerHTML = result.link + " <button onclick='openNew(`" + result.link + "`)' class='btn btn-primary btn-sm'><i class='fas fa-door-open'></i></button>"
               cell3.innerHTML = result.name + ` <button onclick='copy("` + result.name + `")' class='btn btn-primary btn-sm'><i class="far fa-copy"></i></button>`
           });
@@ -815,6 +819,45 @@
      }
    })
  }
+
+ /*function search() {
+   var q = document.getElementById('q').value.toUpperCase()
+   var results = <%-JSON.stringify(db)%>
+   if (q == "") {
+     return swal({
+       title: "Invalid search!",
+       icon: "error"
+     })
+   }
+
+   var arr = [];
+   results.forEach(result => {
+     var code = result.code
+     if (code.contains(q)) {
+       arr.push(code)
+     }
+   });
+   
+   var table = document.getElementById("table");
+   for (var row in table.rows) {
+     var i = row
+     var row = table.rows[row]
+     for (var cell in row.cells) {
+       var cell = row.cells[cell]
+       if (cell.name == "code") {
+         if (cell.innerText == "LOGIN GOV - ADDA") {
+           alert("hi")
+         }
+         if (!arr.includes(cell.innerText)) {
+           // console.log("bad " + cell.innerText)
+           table.deleteRow(i)
+         } else {
+           console.log("good cell: " + cell.innerText + " arr: " + arr[i])
+         }
+       }
+     }
+   }
+}*/
       </script>
 </body>
 </html>

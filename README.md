@@ -1,7 +1,5 @@
 # Password Manager 2.0 (BETA)
 
-Test
-
 ### Installing
 
 Clone the repo by using `git clone https://github.com/IceBotYT/password-manager`.  
